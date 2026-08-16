@@ -709,7 +709,6 @@
           <li>Gabarito direto</li>
         </ul>
         <button class="plan-btn" type="button" data-plan="basico">Quero o Básico</button>
-        <p class="confirm-note" data-confirm="basico">Aqui entra o link de checkout (Cakto) do plano Básico.</p>
       </div>
 
       <div class="plan-card featured reveal">
@@ -726,7 +725,6 @@
           <li>Resolução em vídeo das questões mais difíceis</li>
         </ul>
         <button class="plan-btn" type="button" data-plan="completo">Quero o Completo</button>
-        <p class="confirm-note" data-confirm="completo">Aqui entra o link de checkout (Cakto) do plano Completo.</p>
       </div>
     </div>
   </div>
@@ -1104,25 +1102,21 @@
   var accept = document.getElementById('modalAccept');
   var decline = document.getElementById('modalDecline');
 
-  function showConfirm(plan){
-    var note = document.querySelector('.confirm-note[data-confirm="' + plan + '"]');
-    document.querySelectorAll('.confirm-note').forEach(function(n){ n.classList.remove('show'); });
-    if (note) note.classList.add('show');
-  }
-
   document.querySelectorAll('[data-plan="basico"]').forEach(function(btn){
     btn.addEventListener('click', function(){ modal.classList.add('open'); });
   });
   document.querySelectorAll('[data-plan="completo"]').forEach(function(btn){
-    btn.addEventListener('click', function(){ showConfirm('completo'); });
+    btn.addEventListener('click', function(){ 
+      window.location.href = "https://pay.cakto.com.br/3btedrf_1044295";
+    });
   });
   if (accept) accept.addEventListener('click', function(){
     modal.classList.remove('open');
-    showConfirm('completo');
+    window.location.href = "https://pay.cakto.com.br/zg6ovjg";
   });
   if (decline) decline.addEventListener('click', function(){
     modal.classList.remove('open');
-    showConfirm('basico');
+    window.location.href = "https://pay.cakto.com.br/yh4yhje";
   });
   modal.addEventListener('click', function(e){
     if (e.target === modal) modal.classList.remove('open');
