@@ -700,7 +700,7 @@
       <div class="plan-card reveal">
         <p class="plan-name">Básico</p>
         <p class="plan-sub">Pra quem quer o essencial</p>
-        <p class="plan-price">R$29,90</p>
+        <p class="plan-price" style="font-size:20px; line-height:1.2; font-variant-numeric:tabular-nums;">6x de <span style="font-size:32px; color:var(--ink); font-weight:700;">R$ 5,51</span><span style="font-size:12px; font-weight:400; color:var(--ink-faint); display:block; margin-top:2px;">ou R$ 29,90 à vista</span></p>
         <ul class="plan-feats">
           <li><b>Mapeamento de temas</b> recorrentes da prova</li>
           <li>500 questões selecionadas por incidência</li>
@@ -715,7 +715,7 @@
         <span class="plan-badge">Mais escolhido</span>
         <p class="plan-name">Completo</p>
         <p class="plan-sub">Pra quem quer ir com tudo</p>
-        <p class="plan-price">R$39,90</p>
+        <p class="plan-price" style="font-size:20px; line-height:1.2; font-variant-numeric:tabular-nums;">9x de <span style="font-size:32px; color:var(--ink); font-weight:700;">R$ 5,05</span><span style="font-size:12px; font-weight:400; color:var(--ink-faint); display:block; margin-top:2px;">ou R$ 39,90 à vista</span></p>
         <ul class="plan-feats">
           <li><b>Mapeamento de temas</b> recorrentes da prova</li>
           <li>1000 questões selecionadas por incidência</li>
@@ -1027,7 +1027,7 @@
 </footer>
 
 <div class="sticky-bar" id="stickyBar">
-  <div class="price">R$29,90<small>ou completo por R$39,90</small></div>
+  <div class="price" style="font-size:13px; line-height:1.2; font-variant-numeric:tabular-nums;">6x de <b style="font-size:18px; color:var(--scan);">R$ 5,51</b><small style="font-size:10px; color:var(--ink-faint); display:block; margin-top:2px;">ou completo por 9x de R$ 5,05</small></div>
   <a href="#planos">Ver planos</a>
 </div>
 
@@ -1041,9 +1041,12 @@
       <li>Gabarito comentado (explicação do porquê de cada resposta)</li>
       <li>Resolução em vídeo das questões mais difíceis</li>
     </ul>
-    <div class="modal-price-row"><span class="old">R$39,90</span><span class="new">R$34,90</span></div>
+    <div class="modal-price-row" style="flex-direction:column; align-items:flex-start; gap:4px; font-variant-numeric:tabular-nums; margin-bottom:16px;">
+      <div><span class="old" style="font-size:12px;">De R$ 39,90</span></div>
+      <div style="font-family:var(--mono); font-size:18px; font-weight:700; color:var(--gold);">7x de <span style="font-size:28px;">R$ 5,58</span> <span style="font-size:12px; font-weight:400; color:var(--ink-dim);">ou R$ 34,90 à vista</span></div>
+    </div>
     <div class="modal-actions">
-      <button class="modal-accept" type="button" id="modalAccept">Sim, quero o Completo por R$34,90</button>
+      <button class="modal-accept" type="button" id="modalAccept">Sim, quero o Completo por 7x de R$ 5,58</button>
       <button class="modal-decline" type="button" id="modalDecline">Não, seguir só com o Básico</button>
     </div>
   </div>
