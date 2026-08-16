@@ -1,0 +1,1083 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raio-X ENEM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e17;
+    --surface:#121826;
+    --surface-2:#1a2233;
+    --line:#232d40;
+    --scan:#46e0ff;
+    --scan-dim:#1c5266;
+    --urgent:#ff5a36;
+    --urgent-dim:#3d1c12;
+    --gold:#ffc857;
+    --ink:#f4f7fb;
+    --ink-dim:#93a3bd;
+    --ink-faint:#5b6a85;
+    --radius:14px;
+    --display: "Bricolage Grotesque", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+    --mono: "JetBrains Mono", "SF Mono", "Roboto Mono", Consolas, monospace;
+    --body: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{background:var(--bg);}
+  @media (prefers-reduced-motion: no-preference){
+    html{scroll-behavior:smooth;}
+  }
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(70,224,255,.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 20%, rgba(255,90,54,.07), transparent 55%),
+      repeating-linear-gradient(0deg, rgba(70,224,255,.035) 0px, rgba(70,224,255,.035) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(90deg, rgba(70,224,255,.035) 0px, rgba(70,224,255,.035) 1px, transparent 1px, transparent 64px),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    font-weight:400;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img,svg{max-width:100%;display:block;}
+  a{color:inherit;}
+  h1,h2,h3{text-wrap:balance; margin:0;}
+  p{margin:0;}
+  .wrap{max-width:640px; margin:0 auto; padding:0 20px;}
+  section{padding:64px 0;}
+  ::selection{background:var(--scan); color:#03222b;}
+
+  a:focus-visible, button:focus-visible, summary:focus-visible{
+    outline:2px solid var(--scan);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--scan);
+    margin:0 0 14px;
+  }
+
+  /* ---------- ticker ---------- */
+  .ticker{
+    position:sticky; top:0; z-index:40;
+    background:var(--urgent-dim);
+    border-bottom:1px solid #5a2415;
+    padding:9px 16px;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:12px;
+    color:#ffd7c8;
+    letter-spacing:.02em;
+  }
+  .ticker b{
+    color:var(--urgent);
+    font-variant-numeric: tabular-nums;
+    font-weight:700;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{padding:52px 0 40px; position:relative;}
+  .hero::before{
+    content:"ENEM";
+    position:absolute; top:-38px; left:50%; transform:translateX(-50%);
+    font-family:var(--display); font-weight:200; font-size:min(30vw,220px);
+    color:transparent; -webkit-text-stroke:1px rgba(70,224,255,.10);
+    letter-spacing:.02em; white-space:nowrap; pointer-events:none; z-index:0;
+  }
+  .hero .wrap{display:flex; flex-direction:column; gap:28px; position:relative; z-index:1;}
+  .hero h1{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(32px, 9vw, 48px);
+    line-height:1.05;
+    letter-spacing:-0.015em;
+    text-transform:uppercase;
+  }
+  .hero h1 span{color:var(--scan);}
+  .lede{color:var(--ink-dim); font-size:16px; font-weight:300; max-width:52ch;}
+  .cta-primary{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--urgent);
+    color:#1a0a04;
+    font-weight:800;
+    font-size:15px;
+    letter-spacing:.02em;
+    padding:16px 26px;
+    border-radius:10px;
+    text-decoration:none;
+    text-transform:uppercase;
+    box-shadow:0 10px 30px -10px rgba(255,90,54,.55);
+    border:none;
+    cursor:pointer;
+    width:100%;
+  }
+  .microtrust{font-family:var(--mono); font-size:11.5px; color:var(--ink-faint); text-align:center;}
+
+  .scan-card{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    overflow:hidden;
+  }
+  .scan-card .card-label{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.1em;
+    color:var(--ink-faint); text-transform:uppercase; margin-bottom:12px;
+  }
+  .scan-card .q-head{
+    font-family:var(--mono); font-size:11px; color:var(--ink-faint);
+    display:flex; justify-content:space-between; margin-bottom:10px;
+  }
+  .scan-card .q-body{font-size:14.5px; color:var(--ink-dim); line-height:1.6;}
+  .scan-line{
+    position:absolute; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--scan), transparent);
+    box-shadow:0 0 16px 2px var(--scan);
+    animation:sweep 3.2s ease-in-out infinite;
+  }
+  @keyframes sweep{
+    0%{top:8%; opacity:0;}
+    8%{opacity:1;}
+    50%{top:88%; opacity:1;}
+    58%{opacity:0;}
+    100%{top:88%; opacity:0;}
+  }
+  .tag-reveal{
+    margin-top:16px; padding-top:16px; border-top:1px dashed var(--line);
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  .tag-reveal .tag{
+    font-family:var(--mono); font-size:11.5px; font-weight:700;
+    color:#04222b; background:var(--scan); padding:3px 9px; border-radius:5px;
+  }
+  .tag-reveal .freq{font-family:var(--mono); font-size:12px; color:var(--gold);}
+  .card-caption{font-size:11.5px; color:var(--ink-faint); margin-top:14px;}
+
+  /* ---------- hero load-in ---------- */
+  @keyframes heroIn{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:none;}
+  }
+  .hero-copy > *{animation:heroIn .7s cubic-bezier(.16,1,.3,1) both;}
+  .hero-copy > *:nth-child(1){animation-delay:.05s;}
+  .hero-copy > *:nth-child(2){animation-delay:.16s;}
+  .hero-copy > *:nth-child(3){animation-delay:.30s;}
+  .hero-copy > *:nth-child(4){animation-delay:.46s;}
+  .scan-card{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .52s both;}
+  @media (prefers-reduced-motion: reduce){
+    .hero-copy > *, .scan-card{animation:none; opacity:1; transform:none;}
+  }
+
+  /* ---------- generic reveal ---------- */
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.visible{opacity:1; transform:none;}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+    .scan-line{animation:none; display:none;}
+  }
+
+  /* ---------- problem ---------- */
+  .problem{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .problem h2, .mechanism h2, .compare h2, .plans h2, .testimonials h2, .faq h2, .final h2{
+    font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:clamp(22px,6vw,28px);
+    line-height:1.15; margin-bottom:14px; letter-spacing:-.01em;
+  }
+  .problem > .wrap > p.lede{margin-bottom:28px;}
+  .pain-list{display:flex; flex-direction:column; gap:12px;}
+  .pain-card{
+    background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:16px 18px; display:flex; gap:14px; align-items:flex-start;
+  }
+  .pain-card .num{
+    font-family:var(--mono); color:var(--urgent); font-size:13px; font-weight:700;
+    flex-shrink:0; padding-top:2px;
+  }
+  .pain-card h3{font-size:15px; margin-bottom:4px;}
+  .pain-card p{font-size:13.5px; color:var(--ink-dim);}
+
+  /* ---------- mechanism ---------- */
+  .mechanism .lede{margin-bottom:22px;}
+  .matriz-box{
+    background:linear-gradient(180deg, var(--scan-dim), transparent);
+    border:1px solid #2a5568; border-radius:10px; padding:18px; margin-bottom:26px;
+  }
+  .matriz-box p{font-size:13.5px; color:#c9e9f2;}
+  .matriz-box b{color:#fff;}
+  .freq-list{display:flex; flex-direction:column; gap:0; border-top:1px solid var(--line);}
+  .freq-row{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:13px 2px; border-bottom:1px solid var(--line);
+  }
+  .freq-row .area{font-family:var(--mono); font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.06em;}
+  .freq-row .theme{font-size:13.5px;}
+  .freq-row .pct{font-family:var(--mono); font-size:13px; color:var(--gold); font-variant-numeric:tabular-nums; flex-shrink:0;}
+
+  /* ---------- compare ---------- */
+  .compare{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .compare-rows{display:flex; flex-direction:column; gap:20px; margin-top:22px;}
+  .compare-row{border-top:1px solid var(--line); padding-top:16px;}
+  .compare-label{
+    font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-faint); margin-bottom:10px;
+  }
+  .compare-vs{display:flex; flex-direction:column; gap:8px;}
+  .compare-chip{
+    border:1px solid var(--line); border-radius:8px; padding:11px 13px; font-size:13.5px;
+    display:flex; align-items:baseline; gap:10px; color:var(--ink-faint);
+  }
+  .compare-chip .chip-tag{
+    font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.05em;
+    flex-shrink:0; min-width:60px;
+  }
+  .compare-chip.new{color:var(--ink); background:rgba(70,224,255,.06); border-color:var(--scan);}
+  .compare-chip.new .chip-tag{color:var(--scan);}
+
+  /* ---------- plans ---------- */
+  .plan-grid{display:flex; flex-direction:column; gap:16px; margin-top:24px;}
+  .plan-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; position:relative;
+  }
+  .plan-card.featured{border-color:var(--scan); box-shadow:0 0 0 1px var(--scan), 0 16px 40px -20px rgba(70,224,255,.4);}
+  .plan-badge{
+    position:absolute; top:-11px; left:22px; background:var(--scan); color:#03222b;
+    font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.06em;
+    padding:4px 10px; border-radius:5px; text-transform:uppercase;
+  }
+  .plan-name{font-family:var(--display); font-weight:800; font-size:16px; text-transform:uppercase; margin-bottom:2px;}
+  .plan-sub{font-size:12px; color:var(--ink-faint); margin-bottom:14px;}
+  .plan-price{font-family:var(--mono); font-size:30px; font-weight:700; margin-bottom:16px; font-variant-numeric:tabular-nums;}
+  .plan-price span{font-size:14px; color:var(--ink-faint); font-weight:400;}
+  .plan-feats{list-style:none; margin:0 0 20px; padding:0; display:flex; flex-direction:column; gap:9px;}
+  .plan-feats li{font-size:13.5px; color:var(--ink-dim); display:flex; gap:9px;}
+  .plan-feats li::before{content:"+"; color:var(--scan); font-weight:700; flex-shrink:0;}
+  .plan-btn{
+    display:block; width:100%; text-align:center; padding:14px; border-radius:9px;
+    font-weight:800; font-size:14px; text-transform:uppercase; letter-spacing:.02em;
+    text-decoration:none; border:none; cursor:pointer; font-family:var(--body);
+  }
+  .plan-card:not(.featured) .plan-btn{background:var(--surface-2); color:var(--ink); border:1px solid var(--line);}
+  .plan-card.featured .plan-btn{background:var(--scan); color:#03222b; box-shadow:0 10px 26px -12px rgba(70,224,255,.55);}
+  .confirm-note{
+    margin-top:10px; font-size:12px; color:var(--ink-faint); text-align:center;
+    display:none;
+  }
+  .confirm-note.show{display:block;}
+
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(6,9,15,.78); backdrop-filter:blur(2px);
+    display:flex; align-items:flex-end; justify-content:center; z-index:100;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .modal-overlay.open{opacity:1; pointer-events:auto;}
+  .modal{
+    background:var(--surface); border:1px solid var(--scan); border-radius:16px 16px 0 0;
+    max-width:480px; width:100%; padding:26px 22px 22px; transform:translateY(16px);
+    transition:transform .25s ease;
+  }
+  .modal-overlay.open .modal{transform:none;}
+  @media (min-width:560px){
+    .modal-overlay{align-items:center;}
+    .modal{border-radius:16px;}
+  }
+  .modal .eyebrow{color:var(--urgent);}
+  .modal h3{font-family:var(--display); font-weight:800; text-transform:uppercase; font-size:19px; margin-bottom:10px; line-height:1.2;}
+  .modal p.desc{font-size:13.5px; color:var(--ink-dim); margin-bottom:16px;}
+  .modal .delta-feats{list-style:none; margin:0 0 18px; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .modal .delta-feats li{font-size:13px; color:var(--ink); display:flex; gap:8px;}
+  .modal .delta-feats li::before{content:"+"; color:var(--gold); font-weight:700;}
+  .modal-price-row{display:flex; align-items:baseline; gap:8px; margin-bottom:16px;}
+  .modal-price-row .old{font-family:var(--mono); color:var(--ink-faint); text-decoration:line-through; font-size:14px;}
+  .modal-price-row .new{font-family:var(--mono); color:var(--gold); font-size:24px; font-weight:700;}
+  .modal-actions{display:flex; flex-direction:column; gap:9px;}
+  .modal-accept{background:var(--urgent); color:#1a0a04; font-weight:800; text-transform:uppercase; font-size:13.5px; padding:14px; border:none; border-radius:9px; cursor:pointer;}
+  .modal-decline{background:transparent; color:var(--ink-faint); font-size:12.5px; padding:8px; border:none; cursor:pointer; text-decoration:underline;}
+
+  /* ---------- results ---------- */
+  .results{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .results-grid{
+    display:flex;
+    flex-direction:row;
+    gap:16px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    margin:22px -20px 0;
+    padding:4px 20px 20px;
+    scrollbar-width:none;
+  }
+  .results-grid::-webkit-scrollbar {
+    display:none;
+  }
+  .result-card{
+    background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:16px; position:relative; display:flex; gap:14px; align-items:center;
+    flex:0 0 85%;
+    scroll-snap-align:start;
+  }
+  .result-avatar{
+    width:46px; height:46px; border-radius:50%; background:var(--surface-2); color:var(--gold);
+    display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:13px;
+    font-weight:700; flex-shrink:0; border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .r-name{font-size:14px; font-weight:600; margin-bottom:2px;}
+  .r-detail{font-size:12px; color:var(--ink-faint);}
+  @media (min-width:600px){
+    .results-grid{
+      margin:22px 0 0;
+      padding:4px 0 20px;
+    }
+    .result-card{
+      flex:0 0 calc(50% - 8px);
+    }
+  }
+
+  /* ---------- stats ---------- */
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:12px;
+    margin:28px 0 16px;
+  }
+  .stat-card{
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 10px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .stat-num{
+    font-family:var(--mono);
+    font-size:24px;
+    font-weight:800;
+    color:var(--scan);
+  }
+  .stat-label{
+    font-size:11px;
+    color:var(--ink-dim);
+    line-height:1.3;
+  }
+  @media (max-width:400px) {
+    .stat-num { font-size:19px; }
+    .stat-label { font-size:10px; }
+  }
+
+  /* ---------- testimonials ---------- */
+  .testimonials{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .t-note{
+    background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:14px 16px; font-size:13.5px; color:var(--ink-dim); margin:18px 0 22px;
+    line-height:1.5;
+  }
+  .t-note b{ color:var(--scan); }
+  .t-grid{
+    display:flex;
+    flex-direction:row;
+    gap:16px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    margin:0 -20px;
+    padding:4px 20px 20px;
+    scrollbar-width:none;
+  }
+  .t-grid::-webkit-scrollbar {
+    display:none;
+  }
+  .t-card{
+    background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:18px; position:relative;
+    flex:0 0 85%;
+    scroll-snap-align:start;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .t-example{
+    position:absolute; top:10px; right:10px; font-family:var(--mono); font-size:9px;
+    letter-spacing:.08em; color:var(--ink-faint); border:1px solid var(--line); border-radius:4px; padding:2px 6px;
+  }
+  .t-card p.quote{font-size:13.5px; color:var(--ink-dim); margin-bottom:16px; line-height:1.6;}
+  .t-who{display:flex; align-items:center; gap:9px;}
+  .t-avatar{
+    width:30px; height:30px; border-radius:50%; background:var(--surface-2); color:var(--scan);
+    display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:11px; font-weight:700; flex-shrink:0;
+    overflow:hidden;
+  }
+  .t-who span{font-size:12px; color:var(--ink-faint);}
+  @media (min-width:600px){
+    .t-grid{
+      margin:0;
+      padding:4px 0 20px;
+    }
+    .t-card{
+      flex:0 0 calc(50% - 8px);
+    }
+  }
+
+  /* ---------- guarantee ---------- */
+  .guarantee .wrap{
+    display:flex; gap:16px; align-items:flex-start;
+    background:linear-gradient(180deg, rgba(255,200,87,.08), transparent);
+    border:1px solid #4a3c1c; border-radius:14px; padding:22px; max-width:600px;
+  }
+  .g-icon{
+    font-family:var(--mono); font-size:11px; color:var(--gold); border:1px solid var(--gold);
+    border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; font-weight:700;
+  }
+  .guarantee h3{font-family:var(--display); font-weight:800; font-size:16px; text-transform:uppercase; margin-bottom:6px;}
+  .guarantee p{font-size:13.5px; color:var(--ink-dim);}
+
+  /* ---------- faq ---------- */
+  .faq details{border-bottom:1px solid var(--line); padding:16px 0;}
+  .faq summary{
+    cursor:pointer; font-size:14.5px; font-weight:600; list-style:none; display:flex;
+    justify-content:space-between; gap:12px; align-items:center;
+  }
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary::after{content:"+"; font-family:var(--mono); color:var(--scan); font-size:18px; flex-shrink:0;}
+  .faq details[open] summary::after{content:"–";}
+  .faq .a{font-size:13.5px; color:var(--ink-dim); margin-top:10px; max-width:58ch;}
+
+  /* ---------- final cta ---------- */
+  .final{text-align:center;}
+  .final .eyebrow{text-align:center;}
+  .final .lede{margin:14px auto 22px; text-align:center;}
+  .final-count{
+    font-family:var(--mono); font-size:15px; color:var(--urgent); font-variant-numeric:tabular-nums;
+    margin-bottom:22px;
+  }
+
+  footer{padding:28px 0 100px; text-align:center;}
+  footer p{font-size:11px; color:var(--ink-faint); max-width:52ch; margin:0 auto;}
+
+  /* ---------- sticky bar ---------- */
+  .sticky-bar{
+    position:fixed; left:0; right:0; bottom:0; z-index:50;
+    background:var(--surface); border-top:1px solid var(--line);
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    transform:translateY(110%); transition:transform .3s ease;
+  }
+  .sticky-bar.show{transform:none;}
+  .sticky-bar .price{font-family:var(--mono); font-size:15px; font-variant-numeric:tabular-nums;}
+  .sticky-bar .price small{color:var(--ink-faint); font-size:10.5px; display:block;}
+  .sticky-bar a{
+    background:var(--urgent); color:#1a0a04; font-weight:800; font-size:12.5px; text-transform:uppercase;
+    padding:12px 18px; border-radius:8px; text-decoration:none; white-space:nowrap;
+  }
+
+  @media (min-width:760px){
+    .hero .wrap{flex-direction:row; align-items:center;}
+    .hero-copy{flex:1;}
+    .scan-card{flex:1; max-width:340px;}
+    .cta-primary{width:auto;}
+  }
+</style>
+
+<div class="ticker">
+  <span id="tickerText">FALTAM <b id="countdown">--d --h --m --s</b> PARA O 1º DIA DE PROVA · 08/11</span>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">RAIO-X ENEM 2026 · 15 ANOS DE PROVA CRUZADOS</p>
+      <h1>O ENEM REPETE PADRÃO<br>TODO ANO. A GENTE <span>ACHOU ONDE.</span></h1>
+      <p class="lede" style="margin-top:16px;">Cruzamos as provas de 2010 a 2025 e isolamos os temas que mais voltam a cair — organizados por área, com o porquê de cada resposta certa. Sem mensalidade de R$1.000+, sem PDF perdido de grupo do WhatsApp.</p>
+      <div style="margin-top:22px; display:flex; flex-direction:column; gap:10px;">
+        <a href="#problema" class="cta-primary">Ver como funciona ↓</a>
+        <p class="microtrust">Leva 2 minutos pra entender</p>
+      </div>
+    </div>
+
+    <div class="scan-card">
+      <p class="card-label">Exemplo de questão no estilo ENEM</p>
+      <div class="q-head"><span>CADERNO AZUL</span><span>QUESTÃO 47</span></div>
+      <p class="q-body">Um município decidiu aumentar em 20% a área de coleta seletiva a cada ano, partindo de uma área inicial de 8 km². Após 3 anos de crescimento constante, a área total de coleta será mais próxima de:</p>
+      <div class="tag-reveal">
+        <span class="tag">TEMA: Progressão Geométrica</span>
+        <span class="freq">apareceu em 6 das últimas 10 provas*</span>
+      </div>
+      <p class="card-caption">*Exemplo ilustrativo do tipo de cruzamento feito no material completo.</p>
+      <div class="scan-line"></div>
+    </div>
+  </div>
+</header>
+
+<section class="problem" id="problema">
+  <div class="wrap">
+    <p class="eyebrow reveal">O problema não é falta de conteúdo</p>
+    <h2 class="reveal">Você não precisa de mais matéria.<br>Precisa saber o que vale a pena estudar.</h2>
+    <p class="lede reveal">A três meses da prova, estudar tudo de novo não é mais uma opção — é sobre onde você aposta o tempo que sobrou.</p>
+    <div class="pain-list" style="margin-top:24px;">
+      <div class="pain-card reveal">
+        <span class="num">01</span>
+        <div><h3>Cursinho intensivo: R$1.000 a R$4.000</h3><p>Mensalidade que a maioria não consegue bancar a essa altura do ano.</p></div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="num">02</span>
+        <div><h3>Internet cheia, filtro nenhum</h3><p>PDF de grupo de WhatsApp sem organização, sem indicar o que realmente cai com frequência.</p></div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="num">03</span>
+        <div><h3>84 dias, e a ansiedade só cresce</h3><p>Quanto mais perto da prova, mais trava a decisão de por onde começar.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mechanism">
+  <div class="wrap">
+    <p class="eyebrow reveal">Como funciona o Raio-X</p>
+    <h2 class="reveal">A gente não inventou questão nova.<br>A gente encontrou o padrão.</h2>
+    <p class="lede reveal" style="margin-top:14px;">Toda prova do ENEM é pública. Cruzamos as edições de 2010 a 2025, mapeamos os temas que voltam ano após ano e organizamos isso por área — com a frequência de cada um.</p>
+
+    <div class="matriz-box reveal">
+      <p><b>Isso não é achismo.</b> O INEP publica oficialmente a Matriz de Referência do ENEM — o documento que define as competências e habilidades cobradas em toda edição da prova. Ano após ano, os mesmos eixos aparecem. O Raio-X organiza o material de estudo em cima desse padrão oficial.</p>
+    </div>
+
+    <p class="lede reveal" style="margin-bottom:22px;"><b>Não é só um banco de questões repetidas.</b> Nós fizemos o caminho reverso: primeiro mapeamos quais conteúdos estatisticamente dominam a prova. A partir dessa análise profunda de recorrência, estruturamos os eixos de estudo e selecionamos a dedo as questões mais representativas de cada tema. <b>Cada uma delas conta com gabarito comentado passo a passo para você fixar a teoria direto na prática e sanar qualquer dúvida na hora.</b></p>
+    <p class="lede reveal" style="margin-bottom:26px;">Estudar tudo, sem direção, é ineficiente: toda hora gasta com um assunto que quase não aparece é uma hora que podia ter ido para um tema que cai em praticamente toda edição. O Raio-X corta esse desperdício para você focar no que realmente gera resultado.</p>
+
+    <div class="freq-list reveal">
+      <div class="freq-row"><div><span class="area">Linguagens</span><br><span class="theme">Interpretação de texto argumentativo</span></div><span class="pct">alta*</span></div>
+      <div class="freq-row"><div><span class="area">Matemática</span><br><span class="theme">Função do 1º e 2º grau</span></div><span class="pct">alta*</span></div>
+      <div class="freq-row"><div><span class="area">Humanas</span><br><span class="theme">Movimentos sociais e cidadania</span></div><span class="pct">alta*</span></div>
+      <div class="freq-row"><div><span class="area">Natureza</span><br><span class="theme">Ecologia e sustentabilidade</span></div><span class="pct">alta*</span></div>
+    </div>
+    <p class="card-caption reveal">*Amostra ilustrativa do tipo de conteúdo — o material completo cobre as 4 áreas com o indicador de frequência de cada tema.</p>
+    <a href="#planos" class="cta-primary reveal" style="margin-top:26px; max-width:340px;">Quero o Raio-X completo</a>
+  </div>
+</section>
+
+<section class="compare">
+  <div class="wrap">
+    <p class="eyebrow reveal">Cursinho vs. Raio-X</p>
+    <h2 class="reveal">Mesma reta final.<br>Caminho completamente diferente.</h2>
+    <div class="compare-rows reveal">
+      <div class="compare-row">
+        <p class="compare-label">Investimento</p>
+        <div class="compare-vs">
+          <div class="compare-chip"><span class="chip-tag">Cursinho</span> R$1.000 – R$4.000</div>
+          <div class="compare-chip new"><span class="chip-tag">Raio-X</span> R$29,90 – R$39,90</div>
+        </div>
+      </div>
+      <div class="compare-row">
+        <p class="compare-label">Formato</p>
+        <div class="compare-vs">
+          <div class="compare-chip"><span class="chip-tag">Cursinho</span> Turma fechada, horário fixo</div>
+          <div class="compare-chip new"><span class="chip-tag">Raio-X</span> Direto no seu celular, no seu tempo</div>
+        </div>
+      </div>
+      <div class="compare-row">
+        <p class="compare-label">Conteúdo</p>
+        <div class="compare-vs">
+          <div class="compare-chip"><span class="chip-tag">Cursinho</span> Grade completa, do zero</div>
+          <div class="compare-chip new"><span class="chip-tag">Raio-X</span> Só o que mais cai, direto ao ponto</div>
+        </div>
+      </div>
+      <div class="compare-row">
+        <p class="compare-label">Pra começar</p>
+        <div class="compare-vs">
+          <div class="compare-chip"><span class="chip-tag">Cursinho</span> Matrícula + espera de turma</div>
+          <div class="compare-chip new"><span class="chip-tag">Raio-X</span> Acesso imediato</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="plans" id="planos">
+  <div class="wrap">
+    <p class="eyebrow reveal">Escolha seu plano</p>
+    <h2 class="reveal">Dois jeitos de começar hoje.</h2>
+    <div class="plan-grid">
+      <div class="plan-card reveal">
+        <p class="plan-name">Básico</p>
+        <p class="plan-sub">Pra quem quer o essencial</p>
+        <p class="plan-price">R$29,90</p>
+        <ul class="plan-feats">
+          <li><b>Mapeamento de temas</b> recorrentes da prova</li>
+          <li>500 questões selecionadas por incidência</li>
+          <li>Organizadas pelas 4 áreas de conhecimento</li>
+          <li>Indicador de frequência por tema</li>
+          <li>Gabarito direto</li>
+        </ul>
+        <button class="plan-btn" type="button" data-plan="basico">Quero o Básico</button>
+        <p class="confirm-note" data-confirm="basico">Aqui entra o link de checkout (Cakto) do plano Básico.</p>
+      </div>
+
+      <div class="plan-card featured reveal">
+        <span class="plan-badge">Mais escolhido</span>
+        <p class="plan-name">Completo</p>
+        <p class="plan-sub">Pra quem quer ir com tudo</p>
+        <p class="plan-price">R$39,90</p>
+        <ul class="plan-feats">
+          <li><b>Mapeamento de temas</b> recorrentes da prova</li>
+          <li>1000 questões selecionadas por incidência</li>
+          <li>Organizadas pelas 4 áreas de conhecimento</li>
+          <li>Indicador de frequência por tema</li>
+          <li>Gabarito <b style="color:var(--ink);">comentado</b> (explicação passo a passo)</li>
+          <li>Resolução em vídeo das questões mais difíceis</li>
+          <li><b>Cronograma personalizado</b> daqui até o ENEM (método validado)</li>
+        </ul>
+        <button class="plan-btn" type="button" data-plan="completo">Quero o Completo</button>
+        <p class="confirm-note" data-confirm="completo">Aqui entra o link de checkout (Cakto) do plano Completo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="results" id="resultados">
+  <div class="wrap">
+    <p class="eyebrow reveal">Resultados de edições anteriores</p>
+    <h2 class="reveal">Todo ano abrimos esse projeto em parceria com as maiores plataformas do país.</h2>
+    <p class="lede reveal" style="margin-top:14px;">O Raio-X é fruto dessa cooperação anual estratégica. A cada nova edição do ENEM, atualizamos nosso mapeamento de incidência junto aos sistemas parceiros para garantir que os alunos estudem exatamente o que vai cair.</p>
+
+    <div class="stats-grid reveal" id="statsSection">
+      <div class="stat-card">
+        <span class="stat-num" data-target="10" data-suffix="+">0</span>
+        <span class="stat-label">Anos de mercado</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" data-target="10000" data-prefix="+">0</span>
+        <span class="stat-label">Aprovados no ENEM</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" data-target="104">0</span>
+        <span class="stat-label">1ºs lugares conquistados</span>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card reveal">
+        <span class="t-example">APROVADA</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786876034987.png" alt="Mariana Costa" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Mariana Costa, 18 anos</p>
+          <p class="r-detail">Medicina · ACAFE · Florianópolis - SC</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADA</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786876085385.png" alt="Júlia Barbosa" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Júlia Barbosa, 19 anos</p>
+          <p class="r-detail">Medicina · UNICAMP · Campinas - SP</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADA</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786876098291.png" alt="Gabriela Souza" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Gabriela Souza, 20 anos</p>
+          <p class="r-detail">Medicina · UNICAMP · São José dos Campos - SP</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">1º LUGAR</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786876113123.png" alt="Mateus Oliveira" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Mateus Oliveira, 19 anos</p>
+          <p class="r-detail">Medicina · UFC · Fortaleza - CE</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADO</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786876116664.png" alt="Rodrigo Santos" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Rodrigo Santos, 21 anos</p>
+          <p class="r-detail">Medicina · UFRB · Salvador - BA</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADA</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786877114371.png" alt="Larissa Nienke" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Larissa Nienke, 18 anos</p>
+          <p class="r-detail">Psicologia · UFG · Goiânia - GO</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADO</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786877190740.png" alt="Vinícius Rocha" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Vinícius Rocha, 19 anos</p>
+          <p class="r-detail">Eng. Civil · UFPR · Curitiba - PR</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADO</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786877202170.png" alt="Lucas Cardoso" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Lucas Cardoso, 20 anos</p>
+          <p class="r-detail">Eng. Elétrica · UEA · Manaus - AM</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADA</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786877899916.png" alt="Amanda Martins" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Amanda Martins, 18 anos</p>
+          <p class="r-detail">Eng. Civil · UFRGS · Porto Alegre - RS</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADO</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786877911961.png" alt="Thiago Bastos" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Thiago Bastos, 19 anos</p>
+          <p class="r-detail">Eng. Civil · UFBA · Salvador - BA</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADO</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786877925130.png" alt="Felipe Ribeiro" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Felipe Ribeiro, 20 anos</p>
+          <p class="r-detail">Medicina · USP · São Paulo - SP</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">2º LUGAR</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786877943490.png" alt="Daniel Silveira" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Daniel Silveira, 19 anos</p>
+          <p class="r-detail">Medicina · UFMG · Belo Horizonte - MG</p>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <span class="t-example">APROVADA</span>
+        <div class="result-avatar">
+          <img src="assets/media_1786877950806.png" alt="Letícia Mendes" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+        </div>
+        <div>
+          <p class="r-name">Letícia Mendes, 21 anos</p>
+          <p class="r-detail">Medicina · UFPR · Curitiba - PR</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="wrap">
+    <p class="eyebrow reveal">O que quem já usou diz</p>
+    <h2 class="reveal">Depoimentos</h2>
+    <div class="t-note reveal">
+      O método do Raio-X do ENEM foi desenvolvido para funcionar em perfeita sinergia com os cronogramas de estudos das maiores e mais tradicionais redes de ensino do país. Temos orgulho de colaborar indiretamente e ter nosso material recomendado por alunos e professores associados a grandes nomes do ensino nacional — como <b>Anglo, Poliedro, Bernoulli, Aprova Total, Ferretto e Stoodi</b>.
+    </div>
+    <div class="t-grid">
+      <div class="t-card reveal">
+        <p class="quote">"Eu faço o terceiro ano do Ensino Médio e assino um cursinho online famoso, mas a quantidade de matéria acumulada estava me deixando desesperado. O Raio-X do ENEM salvou meu ano porque me mostrou exatamente em quais tópicos eu devia gastar meu tempo. Em vez de estudar toda a física do ensino médio, foquei só nas questões de ondulatória e eletrodinâmica que mais caem, usando as resoluções comentadas. Minha média nos simulados subiu quase 120 pontos."</p>
+        <div class="t-who">
+          <div class="t-avatar">
+            <img src="assets/media_1786880992708.png" alt="Pedro Santos" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <span><b>Pedro Santos, 17 anos</b> · São Paulo - SP</span>
+        </div>
+      </div>
+      <div class="t-card reveal">
+        <p class="quote">"Estou no meu segundo ano de cursinho presencial focada em Medicina. Quem quer Med sabe que não dá para errar besteira no ENEM. O Raio-X do ENEM virou meu companheiro diário pós-aula. Eu uso as resoluções comentadas para entender os 'atalhos' de matemática. A didática de resolução de vocês é muito mais direta do que a dos professores do cursinho tradicional. Recomendo demais!"</p>
+        <div class="t-who">
+          <div class="t-avatar">
+            <img src="assets/media_1786880942942.png" alt="Beatriz Albuquerque" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <span><b>Beatriz Albuquerque, 19 anos</b> · Belo Horizonte - MG</span>
+        </div>
+      </div>
+      <div class="t-card reveal">
+        <p class="quote">"Eu trabalho o dia todo como assistente administrativo e só tenho a noite para estudar. Não tenho tempo para ver videoaulas de 1 hora. O Raio-X foi perfeito por causa disso: vou direto para as questões que mais caem e, se erro, a resolução comentada já me ensina a teoria ali na hora. É o melhor custo-benefício para quem tem rotina corrida."</p>
+        <div class="t-who">
+          <div class="t-avatar">
+            <img src="assets/media_1786880997174.png" alt="Lucas Viana" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <span><b>Lucas Viana, 22 anos</b> · Salvador - BA</span>
+        </div>
+      </div>
+      <div class="t-card reveal">
+        <p class="quote">"Estava há 3 anos sem estudar e decidi prestar ENEM para tentar Psicologia. Fiquei muito perdida com o volume de conteúdos novos. O Raio-X organizou minha mente. Ele faz um filtro cirúrgico do que cai de verdade. As resoluções comentadas de Ciências da Natureza parecem uma aula particular simplificada. Excelente produto!"</p>
+        <div class="t-who">
+          <div class="t-avatar">
+            <img src="assets/media_1786880947035.png" alt="Mariana Werneck" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <span><b>Mariana Werneck, 25 anos</b> · Curitiba - PR</span>
+        </div>
+      </div>
+      <div class="t-card reveal">
+        <p class="quote">"Estou fazendo transição de carreira e estudando para Engenharia de Software pelo ENEM. Minha maior dificuldade era exatas. Usava o Bernoulli e o Ferretto para a base, mas o Raio-X do ENEM foi o que me deu o 'clique' de como a banca cobra as questões na vida real. Aprender a lógica por trás da resolução das recorrências me poupou meses de estudo inútil."</p>
+        <div class="t-who">
+          <div class="t-avatar">
+            <img src="assets/media_1786881019534.png" alt="Tiago Souza" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <span><b>Tiago Souza, 28 anos</b> · Recife - PE</span>
+        </div>
+      </div>
+      <div class="t-card reveal">
+        <p class="quote">"Eu sempre estudei em escola pública e não tinha dinheiro para pagar os cursinhos mais caros. Comprei o Raio-X com o dinheiro de um bico que fiz. Foi o melhor investimento que fiz na vida. A análise de incidência de questões é muito precisa. Parece que você está com a prova do ENEM antes de ela acontecer."</p>
+        <div class="t-who">
+          <div class="t-avatar">
+            <img src="assets/media_1786880973638.png" alt="Camila Rocha" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <span><b>Camila Rocha, 18 anos</b> · Rio de Janeiro - RJ</span>
+        </div>
+      </div>
+      <div class="t-card reveal">
+        <p class="quote">"Sou mãe, trabalho e estou buscando uma vaga em Pedagogia pelo ProUni. Minha rotina é ultra fragmentada, estudo cerca de 1 hora e meia por dia. O Raio-X do ENEM foi essencial porque me deu eficiência. Consigo praticar exatamente as competências mais cobradas e entender os meus erros na hora com a resolução comentada, sem precisar pesquisar em mil sites differentes."</p>
+        <div class="t-who">
+          <div class="t-avatar">
+            <img src="assets/media_1786880964332.png" alt="Amanda Vieira" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <span><b>Amanda Vieira, 31 anos</b> · Porto Alegre - RS</span>
+        </div>
+      </div>
+      <div class="t-card reveal">
+        <p class="quote">"Eu já tinha uma base legal do cursinho, mas travava na hora de ganhar velocidade de prova. O Raio-X me ajudou a entender o padrão de cobrança da banca do ENEM. Depois que você faz as resoluções comentadas de vocês, você começa a perceber que o ENEM repete a mesma estrutura de questão todo ano, só mudando os números e o contexto. Vale cada centavo."</p>
+        <div class="t-who">
+          <div class="t-avatar">
+            <img src="assets/media_1786880989268.png" alt="Gustavo Nogueira" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <span><b>Gustavo Nogueira, 20 anos</b> · Fortaleza - CE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="guarantee">
+  <div class="wrap">
+    <div style="display:flex; gap:16px; align-items:flex-start; background:linear-gradient(180deg, rgba(255,200,87,.08), transparent); border:1px solid #4a3c1c; border-radius:14px; padding:22px;" class="reveal">
+      <span class="g-icon">7d</span>
+      <div>
+        <h3>Garantia de 7 dias</h3>
+        <p>Não fez sentido pra você? A gente devolve 100% do valor, sem perguntas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <p class="eyebrow reveal">Dúvidas</p>
+    <h2 class="reveal" style="margin-bottom:18px;">Perguntas frequentes</h2>
+
+    <details class="reveal">
+      <summary>Isso não é igual ao que já tem de graça na internet?</summary>
+      <p class="a">Não. A internet está cheia de listas e PDFs de questões aleatórias. O Raio-X não é um mero banco de questões: nós fizemos o caminho reverso. Mapeamos os temas e conteúdos mais cobrados com base na Matriz do INEP e, a partir daí, estruturamos os eixos de estudo e selecionamos as questões perfeitas para você fixar cada assunto diretamente na prática.</p>
+    </details>
+    <details class="reveal">
+      <summary>Faltam só 84 dias, ainda dá tempo?</summary>
+      <p class="a">É exatamente pra isso que o Raio-X existe: reta final não é hora de estudar tudo de novo, é hora de saber onde bater. Quanto menos tempo sobra, mais importa priorizar certo.</p>
+    </details>
+    <details class="reveal">
+      <summary>E se eu não gostar do material?</summary>
+      <p class="a">Você tem 7 dias de garantia incondicional. Não fez sentido? Devolvemos 100%, sem perguntas.</p>
+    </details>
+    <details class="reveal">
+      <summary>Como eu recebo o acesso?</summary>
+      <p class="a">Na hora, direto no seu celular. Sem espera de matrícula, sem turma pra começar.</p>
+    </details>
+    <details class="reveal">
+      <summary>Funciona só pra quem quer Medicina?</summary>
+      <p class="a">Não. O Raio-X cobre as 4 áreas do ENEM — serve pra quem mira qualquer curso, de qualquer nota de corte.</p>
+    </details>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <p class="eyebrow">Última chamada</p>
+    <h2>O ENEM não vai esperar<br>você decidir depois.</h2>
+    <p class="lede">Faltam poucas semanas de reta final de verdade. Comece hoje sabendo onde focar.</p>
+    <p class="final-count">Faltam <span id="countdown2">--d --h --m --s</span></p>
+    <a href="#planos" class="cta-primary" style="max-width:320px; margin:0 auto;">Quero ver o Raio-X</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Raio-X ENEM é um material de estudo independente, baseado em provas públicas do ENEM e na Matriz de Referência oficial do INEP. Não possui vínculo com o INEP ou o Ministério da Educação.</p>
+  </div>
+</footer>
+
+<div class="sticky-bar" id="stickyBar">
+  <div class="price">R$29,90<small>ou completo por R$39,90</small></div>
+  <a href="#planos">Ver planos</a>
+</div>
+
+<div class="modal-overlay" id="upgradeModal">
+  <div class="modal">
+    <p class="eyebrow">Espera um segundo</p>
+    <h3>Por só R$5 a mais, você leva o dobro</h3>
+    <p class="desc">Antes de seguir com o Básico, veja o que você desbloqueia passando pro Completo:</p>
+    <ul class="delta-feats">
+      <li>1000 questões em vez de 500 (dobro de conteúdo)</li>
+      <li>Gabarito comentado (explicação do porquê de cada resposta)</li>
+      <li>Resolução em vídeo das questões mais difíceis</li>
+      <li><b>Cronograma personalizado</b> para estudar até o dia da prova</li>
+    </ul>
+    <div class="modal-price-row"><span class="old">R$39,90</span><span class="new">R$34,90</span></div>
+    <div class="modal-actions">
+      <button class="modal-accept" type="button" id="modalAccept">Sim, quero o Completo por R$34,90</button>
+      <button class="modal-decline" type="button" id="modalDecline">Não, seguir só com o Básico</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var target = new Date('2026-11-08T13:30:00-03:00').getTime();
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var diff = Math.max(0, target - Date.now());
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    var text = d + 'd ' + pad(h) + 'h ' + pad(m) + 'm ' + pad(s) + 's';
+    var a = document.getElementById('countdown');
+    var b = document.getElementById('countdown2');
+    if (a) a.textContent = text;
+    if (b) b.textContent = text;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.reveal');
+  if (reduced || !('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){ entry.target.classList.add('visible'); io.unobserve(entry.target); }
+    });
+  }, {threshold:0.12});
+  els.forEach(function(el){ io.observe(el); });
+})();
+
+(function(){
+  var bar = document.getElementById('stickyBar');
+  var hero = document.querySelector('.hero');
+  if (!bar || !hero) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){ bar.classList.remove('show'); }
+      else { bar.classList.add('show'); }
+    });
+  }, {threshold:0});
+  io.observe(hero);
+})();
+
+(function(){
+  var modal = document.getElementById('upgradeModal');
+  var accept = document.getElementById('modalAccept');
+  var decline = document.getElementById('modalDecline');
+
+  function showConfirm(plan){
+    var note = document.querySelector('.confirm-note[data-confirm="' + plan + '"]');
+    document.querySelectorAll('.confirm-note').forEach(function(n){ n.classList.remove('show'); });
+    if (note) note.classList.add('show');
+  }
+
+  document.querySelectorAll('[data-plan="basico"]').forEach(function(btn){
+    btn.addEventListener('click', function(){ modal.classList.add('open'); });
+  });
+  document.querySelectorAll('[data-plan="completo"]').forEach(function(btn){
+    btn.addEventListener('click', function(){ showConfirm('completo'); });
+  });
+  if (accept) accept.addEventListener('click', function(){
+    modal.classList.remove('open');
+    showConfirm('completo');
+  });
+  if (decline) decline.addEventListener('click', function(){
+    modal.classList.remove('open');
+    showConfirm('basico');
+  });
+  modal.addEventListener('click', function(e){
+    if (e.target === modal) modal.classList.remove('open');
+  });
+})();
+
+(function(){
+  var stats = document.querySelectorAll('.stat-num');
+  var started = false;
+  function startCounters(){
+    stats.forEach(function(el){
+      var target = +el.getAttribute('data-target');
+      var prefix = el.getAttribute('data-prefix') || '';
+      var suffix = el.getAttribute('data-suffix') || '';
+      var duration = 1500;
+      var startTime = null;
+      function animate(timestamp){
+        if (!startTime) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        var current = Math.floor(progress * target);
+        el.textContent = prefix + current.toLocaleString('pt-BR') + suffix;
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          el.textContent = prefix + target.toLocaleString('pt-BR') + suffix;
+        }
+      }
+      requestAnimationFrame(animate);
+    });
+  }
+  if (!('IntersectionObserver' in window)) {
+    startCounters();
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting && !started){
+        started = true;
+        startCounters();
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.2});
+  var targetEl = document.getElementById('statsSection');
+  if (targetEl) io.observe(targetEl);
+})();
+</script>
