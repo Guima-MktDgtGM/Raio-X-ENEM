@@ -224,23 +224,33 @@
 
   /* ---------- compare ---------- */
   .compare{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-  .compare-rows{display:flex; flex-direction:column; gap:20px; margin-top:22px;}
-  .compare-row{border-top:1px solid var(--line); padding-top:16px;}
-  .compare-label{
-    font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em;
-    color:var(--ink-faint); margin-bottom:10px;
+  .compare-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+    margin-top:24px;
   }
-  .compare-vs{display:flex; flex-direction:column; gap:8px;}
-  .compare-chip{
-    border:1px solid var(--line); border-radius:8px; padding:11px 13px; font-size:13.5px;
-    display:flex; align-items:baseline; gap:10px; color:var(--ink-faint);
+  .compare-card{
+    background:var(--bg); border:1px solid var(--line); border-radius:10px;
+    padding:22px; position:relative; display:flex; flex-direction:column; gap:12px;
   }
-  .compare-chip .chip-tag{
-    font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.05em;
-    flex-shrink:0; min-width:60px;
+  .compare-card.winner{
+    border-color:var(--scan);
+    box-shadow:0 8px 30px -10px rgba(70,224,255,.2);
+    background:linear-gradient(180deg, rgba(70,224,255,.04), transparent);
   }
-  .compare-chip.new{color:var(--ink); background:rgba(70,224,255,.06); border-color:var(--scan);}
-  .compare-chip.new .chip-tag{color:var(--scan);}
+  .compare-card h3{font-family:var(--display); font-weight:800; font-size:17px; text-transform:uppercase; margin-bottom:4px;}
+  .compare-card.winner h3{color:var(--scan);}
+  .compare-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px;}
+  .compare-list li{font-size:13.5px; color:var(--ink-dim); display:flex; gap:9px;}
+  .compare-list li::before{content:"✕"; color:var(--urgent); font-weight:700; flex-shrink:0;}
+  .compare-card.winner .compare-list li{color:var(--ink);}
+  .compare-card.winner .compare-list li::before{content:"✓"; color:var(--scan); font-weight:700; flex-shrink:0;}
+  @media (min-width:600px){
+    .compare-grid{
+      grid-template-columns:repeat(3, 1fr);
+    }
+  }
 
   /* ---------- plans ---------- */
   .plan-grid{display:flex; flex-direction:column; gap:16px; margin-top:24px;}
@@ -499,7 +509,7 @@
       <h1>O ENEM REPETE PADRÃO<br>TODO ANO. A GENTE <span>ACHOU ONDE.</span></h1>
       <p class="lede" style="margin-top:16px;">Cruzamos as provas de 2010 a 2025 e isolamos os temas que mais voltam a cair — organizados por área, com o porquê de cada resposta certa. Sem mensalidade de R$1.000+, sem PDF perdido de grupo do WhatsApp.</p>
       <div style="margin-top:22px; display:flex; flex-direction:column; gap:10px;">
-        <a href="#problema" class="cta-primary">Ver como funciona ↓</a>
+        <a href="#funcionamento" class="cta-primary">Ver como funciona ↓</a>
         <p class="microtrust">Leva 2 minutos pra entender</p>
       </div>
     </div>
@@ -518,36 +528,14 @@
   </div>
 </header>
 
-<section class="problem" id="problema">
-  <div class="wrap">
-    <p class="eyebrow reveal">O problema não é falta de conteúdo</p>
-    <h2 class="reveal">Você não precisa de mais matéria.<br>Precisa saber o que vale a pena estudar.</h2>
-    <p class="lede reveal">A três meses da prova, estudar tudo de novo não é mais uma opção — é sobre onde você aposta o tempo que sobrou.</p>
-    <div class="pain-list" style="margin-top:24px;">
-      <div class="pain-card reveal">
-        <span class="num">01</span>
-        <div><h3>Cursinho intensivo: R$1.000 a R$4.000</h3><p>Mensalidade que a maioria não consegue bancar a essa altura do ano.</p></div>
-      </div>
-      <div class="pain-card reveal">
-        <span class="num">02</span>
-        <div><h3>Internet cheia, filtro nenhum</h3><p>PDF de grupo de WhatsApp sem organização, sem indicar o que realmente cai com frequência.</p></div>
-      </div>
-      <div class="pain-card reveal">
-        <span class="num">03</span>
-        <div><h3>84 dias, e a ansiedade só cresce</h3><p>Quanto mais perto da prova, mais trava a decisão de por onde começar.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="mechanism">
+<section class="mechanism" id="funcionamento">
   <div class="wrap">
     <p class="eyebrow reveal">Como funciona o Raio-X</p>
     <h2 class="reveal">A gente não inventou questão nova.<br>A gente encontrou o padrão.</h2>
     <p class="lede reveal" style="margin-top:14px;">Toda prova do ENEM é pública. Cruzamos as edições de 2010 a 2025, mapeamos os temas que voltam ano após ano e organizamos isso por área — com a frequência de cada um.</p>
 
     <div class="matriz-box reveal">
-      <p><b>Isso não é achismo.</b> O INEP publica oficialmente a Matriz de Referência do ENEM — o documento que define as competências e habilidades cobradas em toda edição da prova. Ano após ano, os mesmos eixos aparecem. O Raio-X organiza o material de estudo em cima desse padrão oficial.</p>
+      <p><b>Isso não é achismo.</b> O INEP publica oficialmente a Matriz de Referência do ENEM — o documento que define as competências e habilidades cobradas in toda edição da prova. Ano após ano, os mesmos eixos aparecem. O Raio-X organiza o material de estudo em cima desse padrão oficial.</p>
     </div>
 
     <p class="lede reveal" style="margin-bottom:22px;"><b>Não é só um banco de questões repetidas.</b> Nós fizemos o caminho reverso: primeiro mapeamos quais conteúdos estatisticamente dominam a prova. A partir dessa análise profunda de recorrência, estruturamos os eixos de estudo e selecionamos a dedo as questões mais representativas de cada tema. <b>Cada uma delas conta com gabarito comentado passo a passo para você fixar a teoria direto na prática e sanar qualquer dúvida na hora.</b></p>
@@ -564,38 +552,66 @@
   </div>
 </section>
 
-<section class="compare">
+<section class="problem" id="problema">
+  <div class="wrap">
+    <p class="eyebrow reveal">O Cenário da Reta Final</p>
+    <h2 class="reveal">Tentar estudar toda a matéria do zero a essa altura é impossível.</h2>
+    <p class="lede reveal">Para quem está a poucos meses da prova, tentar cobrir todo o edital gera acúmulo e ansiedade. É aí que a maioria dos estudantes cai nestes 3 grandes obstáculos:</p>
+    <div class="pain-list" style="margin-top:24px;">
+      <div class="pain-card reveal">
+        <span class="num">01</span>
+        <div><h3>Apostar em cursinhos caros e longos</h3><p>Mensalidade alta de R$1.000 a R$4.000 para assistir a centenas de horas de aulas teóricas desnecessárias nesta reta final.</p></div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="num">02</span>
+        <div><h3>Acumular arquivos desorganizados</h3><p>Perder tempo minerando PDFs soltos em grupos de WhatsApp sem nenhum filtro de peso ou indicação do que cai de verdade.</p></div>
+      </div>
+      <div class="pain-card reveal">
+        <span class="num">03</span>
+        <div><h3>Paralisar com o tempo que resta</h3><p>O ENEM se aproximando rapidamente e você travado sem saber exatamente em qual assunto investir as últimas horas de estudo.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="compare" id="comparacao">
   <div class="wrap">
     <p class="eyebrow reveal">Cursinho vs. Raio-X</p>
-    <h2 class="reveal">Mesma reta final.<br>Caminho completamente diferente.</h2>
-    <div class="compare-rows reveal">
-      <div class="compare-row">
-        <p class="compare-label">Investimento</p>
-        <div class="compare-vs">
-          <div class="compare-chip"><span class="chip-tag">Cursinho</span> R$1.000 – R$4.000</div>
-          <div class="compare-chip new"><span class="chip-tag">Raio-X</span> R$29,90 – R$39,90</div>
-        </div>
+    <h2 class="reveal">Caminhos diferentes para a reta final do ENEM.</h2>
+    <p class="lede reveal" style="margin-bottom:24px;">Compare a eficiência e a praticidade de cada opção de estudo para as poucas semanas que restam:</p>
+    
+    <div class="compare-grid reveal">
+      <div class="compare-card">
+        <p class="compare-label">Opção 01</p>
+        <h3>Cursinho Tradicional</h3>
+        <ul class="compare-list">
+          <li>Mensalidade de R$1.000 a R$4.000</li>
+          <li>Grade completa do zero (impossível ler tudo)</li>
+          <li>Aulas longas com teoria demorada</li>
+          <li>Turmas com horários fixos e rígidos</li>
+        </ul>
       </div>
-      <div class="compare-row">
-        <p class="compare-label">Formato</p>
-        <div class="compare-vs">
-          <div class="compare-chip"><span class="chip-tag">Cursinho</span> Turma fechada, horário fixo</div>
-          <div class="compare-chip new"><span class="chip-tag">Raio-X</span> Direto no seu celular, no seu tempo</div>
-        </div>
+
+      <div class="compare-card">
+        <p class="compare-label">Opção 02</p>
+        <h3>PDFs de Grupos</h3>
+        <ul class="compare-list">
+          <li>Custo zero (aparentemente)</li>
+          <li>Material bagunçado e sem filtro de peso</li>
+          <li>Nenhuma explicação do porquê de cada resposta</li>
+          <li>Perda de tempo buscando o que cai</li>
+        </ul>
       </div>
-      <div class="compare-row">
-        <p class="compare-label">Conteúdo</p>
-        <div class="compare-vs">
-          <div class="compare-chip"><span class="chip-tag">Cursinho</span> Grade completa, do zero</div>
-          <div class="compare-chip new"><span class="chip-tag">Raio-X</span> Só o que mais cai, direto ao ponto</div>
-        </div>
-      </div>
-      <div class="compare-row">
-        <p class="compare-label">Pra começar</p>
-        <div class="compare-vs">
-          <div class="compare-chip"><span class="chip-tag">Cursinho</span> Matrícula + espera de turma</div>
-          <div class="compare-chip new"><span class="chip-tag">Raio-X</span> Acesso imediato</div>
-        </div>
+
+      <div class="compare-card winner">
+        <span class="plan-badge">Método Raio-X</span>
+        <h3>Raio-X ENEM</h3>
+        <ul class="compare-list">
+          <li>Baixo custo de parcela única</li>
+          <li>Foco cirúrgico só nos temas recorrentes</li>
+          <li>Gabarito comentado passo a passo</li>
+          <li>Acesso imediato direto no celular</li>
+        </ul>
       </div>
     </div>
   </div>
