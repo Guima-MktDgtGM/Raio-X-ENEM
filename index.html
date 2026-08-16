@@ -496,6 +496,71 @@
     .scan-card{flex:1; max-width:340px;}
     .cta-primary{width:auto;}
   }
+
+  /* ---------- sales notification popup ---------- */
+  .sales-bubble {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+    background: var(--surface);
+    border: 1.5px solid #10b981; /* mockup green border */
+    border-radius: 14px;
+    padding: 12px 16px;
+    width: calc(100% - 40px);
+    max-width: 320px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transform: translateY(150%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .sales-bubble.show {
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .sales-bubble-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sales-bubble-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #10b981; /* mockup green */
+  }
+  .sales-bubble-close {
+    background: transparent;
+    border: none;
+    color: var(--ink-faint);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 4px;
+  }
+  .sales-bubble-content {
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    line-height: 1.4;
+  }
+  .sales-bubble-content b {
+    color: var(--ink);
+  }
+  .sales-bubble-time {
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-align: right;
+    margin-top: 2px;
+  }
+  
+  @media (max-width: 760px) {
+    .sales-bubble {
+      bottom: 80px; /* Float safely above the mobile sticky bar */
+    }
+  }
 </style>
 
 <div class="ticker">
@@ -1095,5 +1160,99 @@
   }, {threshold:0.2});
   var targetEl = document.getElementById('statsSection');
   if (targetEl) io.observe(targetEl);
+})();
+
+(function(){
+  // Create bubble element and append to body
+  var bubble = document.createElement('div');
+  bubble.className = 'sales-bubble';
+  bubble.id = 'salesBubble';
+  bubble.innerHTML = 
+    '<div class="sales-bubble-header">' +
+      '<span class="sales-bubble-name" id="bubbleName">--</span>' +
+      '<button class="sales-bubble-close" id="bubbleClose">&times;</button>' +
+    '</div>' +
+    '<div class="sales-bubble-content" id="bubbleContent">--</div>' +
+    '<div class="sales-bubble-time" id="bubbleTime">--</div>';
+  document.body.appendChild(bubble);
+
+  var closeBtn = document.getElementById('bubbleClose');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function(){
+      bubble.classList.remove('show');
+    });
+  }
+
+  var buyers = [
+    { name: "Ana Silva", city: "São Paulo - SP" },
+    { name: "Beatriz Santos", city: "Belo Horizonte - MG" },
+    { name: "Mariana Costa", city: "Rio de Janeiro - RJ" },
+    { name: "Juliana Souza", city: "Curitiba - PR" },
+    { name: "Gabriela Lima", city: "Salvador - BA" },
+    { name: "Amanda Pereira", city: "Porto Alegre - RS" },
+    { name: "Larissa Ferreira", city: "Florianópolis - SC" },
+    { name: "Fernanda Rodrigues", city: "Vitória - ES" },
+    { name: "Camila Gomes", city: "Niterói - RJ" },
+    { name: "Pedro Rocha", city: "Campinas - SP" },
+    { name: "Lucas Mendes", city: "Recife - PE" },
+    { name: "Tiago Bastos", city: "Fortaleza - CE" },
+    { name: "Matheus Ribeiro", city: "Brasília - DF" },
+    { name: "Rodrigo Alves", city: "Goiânia - GO" },
+    { name: "Felipe Cardoso", city: "Manaus - AM" },
+    { name: "Gabriel Neves", city: "Belém - PA" },
+    { name: "Daniel Carvalho", city: "Natal - RN" },
+    { name: "Lucas Viana", city: "Vitória da Conquista - BA" },
+    { name: "Gustavo Nogueira", city: "Sobral - CE" },
+    { name: "Isabela Martins", city: "Londrina - PR" }
+  ];
+
+  var plans = [
+    "adquiriu o <b>Raio-X Completo</b>",
+    "adquiriu o <b>Raio-X Completo + Cronograma</b>",
+    "adquiriu o <b>Raio-X Básico</b>",
+    "garantiu o plano <b>Completo</b> com desconto",
+    "acabou de garantir a vaga no <b>Raio-X Completo</b>"
+  ];
+
+  var times = [
+    "há 23 segundos",
+    "há 45 segundos",
+    "há 1 minuto",
+    "há 2 minutos",
+    "há 3 minutos",
+    "há 4 minutos",
+    "há 6 minutos"
+  ];
+
+  function showBubble() {
+    var buyer = buyers[Math.floor(Math.random() * buyers.length)];
+    var plan = plans[Math.floor(Math.random() * plans.length)];
+    var time = times[Math.floor(Math.random() * times.length)];
+
+    var nameEl = document.getElementById('bubbleName');
+    var contentEl = document.getElementById('bubbleContent');
+    var timeEl = document.getElementById('bubbleTime');
+
+    if (nameEl) nameEl.textContent = buyer.name + ' (' + buyer.city + ')';
+    if (contentEl) contentEl.innerHTML = plan;
+    if (timeEl) timeEl.textContent = time;
+
+    bubble.classList.add('show');
+
+    // Auto hide after 5 seconds
+    setTimeout(function() {
+      bubble.classList.remove('show');
+      scheduleNext();
+    }, 5000);
+  }
+
+  function scheduleNext() {
+    // Random interval between 8 and 25 seconds
+    var delay = Math.floor(Math.random() * (25000 - 8000 + 1)) + 8000;
+    setTimeout(showBubble, delay);
+  }
+
+  // Initial delay of 6 seconds before first popup
+  setTimeout(showBubble, 6000);
 })();
 </script>
